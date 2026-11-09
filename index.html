@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือและแดชบอร์ดการขยายพันธุ์กะเพรา (Basil Propagation Dashboard)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Sarabun & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        herb: {
+                            dark: '#0d2818',
+                            accent: '#2d6a4f',
+                            light: '#b7e4c7',
+                            highlight: '#52b788',
+                        }
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f8fafc;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Kanit', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .custom-shadow {
+            box-shadow: 0 10px 30px -5px rgba(22, 163, 74, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+        }
+        .tab-btn.active {
+            background-color: #16a34a;
+            color: #ffffff;
+            box-shadow: 0 4px 14px 0 rgba(22, 163, 74, 0.39);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Banner -->
+    <header class="sticky top-0 z-50 glass-card border-b border-emerald-100 bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-green-400 flex items-center justify-center text-white shadow-md shadow-emerald-200">
+                        <i data-lucide="sprout" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-bold text-xl text-emerald-950 block leading-none">Basil Master</span>
+                        <span class="text-xs text-emerald-600 font-medium">คู่มือการขยายพันธุ์กะเพราฉบับสมบูรณ์</span>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#overview" class="text-slate-600 hover:text-emerald-600 transition">ภาพรวม KPI</a>
+                    <a href="#comparison" class="text-slate-600 hover:text-emerald-600 transition">เปรียบเทียบเชิงลึก</a>
+                    <a href="#methods" class="text-slate-600 hover:text-emerald-600 transition">ขั้นตอน 3 วิธี</a>
+                    <a href="#wizard" class="text-slate-600 hover:text-emerald-600 transition">เลือกวิธีที่ใช่</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-900 via-herb-dark to-emerald-950 text-white p-8 sm:p-10 shadow-2xl">
+            <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-1/3 -top-10 w-60 h-60 bg-green-400/15 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center space-x-2 bg-emerald-500/20 border border-emerald-400/30 px-3 py-1 rounded-full text-emerald-300 text-xs font-medium mb-4">
+                    <i data-lucide="leaf" class="w-3.5 h-3.5"></i>
+                    <span>เกษตรประณีต & การปลูกพืชสวนครัว</span>
+                </div>
+                <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight mb-4">
+                    เจาะลึก 3 วิธีการขยายพันธุ์กะเพราให้ได้ผลผลิตสูงสุด
+                </h1>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed mb-6">
+                    สรุปเทคนิคและคู่มือการปฏิบัติจริงสำหรับการขยายพันธุ์กะเพราอย่างถูกวิธี เพื่อเพิ่มอัตราการรอด เพิ่มจำนวนต้น และเก็บเกี่ยวผลผลิตได้อย่างรวดเร็ว
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#methods" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-medium shadow-lg shadow-emerald-500/30 transition flex items-center space-x-2 text-sm">
+                        <span>ดูวิธีปฏิบัติอย่างละเอียด</span>
+                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#wizard" class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium border border-white/20 transition flex items-center space-x-2 text-sm backdrop-blur-md">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-300"></i>
+                        <span>วิเคราะห์วิธีที่เหมาะกับคุณ</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: KPI Cards -->
+        <section id="overview" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Card 1 -->
+            <div class="glass-card rounded-2xl p-6 custom-shadow relative overflow-hidden transition hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">วิธีที่ 1</span>
+                    <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                        <i data-lucide="scissors" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <h3 class="font-heading text-lg font-semibold text-slate-800">การปักชำในดิน</h3>
+                <div class="mt-2 flex items-baseline space-x-2">
+                    <span class="text-3xl font-bold text-emerald-600">2-3</span>
+                    <span class="text-slate-500 text-sm">สัปดาห์เก็บเกี่ยว</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">ได้ต้นตรงตามแม่พันธุ์ 100% โตไวและนิยมใช้มากที่สุด</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-card rounded-2xl p-6 custom-shadow relative overflow-hidden transition hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">วิธีที่ 2</span>
+                    <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="wheat" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <h3 class="font-heading text-lg font-semibold text-slate-800">การเพาะเมล็ด</h3>
+                <div class="mt-2 flex items-baseline space-x-2">
+                    <span class="text-3xl font-bold text-amber-600">100+</span>
+                    <span class="text-slate-500 text-sm">ต้นต่อครั้ง</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">ได้ระบบรากแก้วที่แข็งแรง ต้นมีอายุยืนยาว เหมาะทำแปลงใหญ่</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-card rounded-2xl p-6 custom-shadow relative overflow-hidden transition hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">วิธีที่ 3</span>
+                    <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <i data-lucide="droplet" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <h3 class="font-heading text-lg font-semibold text-slate-800">การปักชำในน้ำ</h3>
+                <div class="mt-2 flex items-baseline space-x-2">
+                    <span class="text-3xl font-bold text-blue-600">7-14</span>
+                    <span class="text-slate-500 text-sm">วัน รากงอกชัดเจน</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">ง่าย สะอาด สะดวก เหมาะสำหรับพื้นที่จำกัดหรือบนคอนโด</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="glass-card rounded-2xl p-6 custom-shadow relative overflow-hidden transition hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">สถิติทั่วไป</span>
+                    <div class="w-9 h-9 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <h3 class="font-heading text-lg font-semibold text-slate-800">อัตราการรอดชีวิต</h3>
+                <div class="mt-2 flex items-baseline space-x-2">
+                    <span class="text-3xl font-bold text-purple-600">85-95%</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">เมื่อดูแลความชื้น แสงแดด และเลือกกิ่งพันธุ์อย่างถูกวิธี</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Visual Charts & Comparative Analytics -->
+        <section id="comparison" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Radar Chart: Multi-Factor Comparison -->
+            <div class="lg:col-span-6 glass-card rounded-3xl p-6 custom-shadow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="font-heading text-xl font-bold text-slate-900">เปรียบเทียบสมรรถนะแต่ละวิธี</h2>
+                            <p class="text-xs text-slate-500">วิเคราะห์ 5 มิติสำคัญเพื่อเลือกวิธีที่เหมาะที่สุด</p>
+                        </div>
+                        <span class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <i data-lucide="radar" class="w-5 h-5"></i>
+                        </span>
+                    </div>
+                    <div class="h-72 relative flex items-center justify-center">
+                        <canvas id="propagationRadarChart"></canvas>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-4 text-center text-xs pt-4 border-t border-slate-100">
+                    <div class="p-2 rounded-lg bg-emerald-50">
+                        <span class="block font-bold text-emerald-700">ปักชำในดิน</span>
+                        <span class="text-slate-500">เก็บเกี่ยวเร็วสุด</span>
+                    </div>
+                    <div class="p-2 rounded-lg bg-amber-50">
+                        <span class="block font-bold text-amber-700">เพาะเมล็ด</span>
+                        <span class="text-slate-500">รากแข็งแรงที่สุด</span>
+                    </div>
+                    <div class="p-2 rounded-lg bg-blue-50">
+                        <span class="block font-bold text-blue-700">ปักชำในน้ำ</span>
+                        <span class="text-slate-500">ทำง่ายที่สุด</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bar Chart: Timeline Comparison -->
+            <div class="lg:col-span-6 glass-card rounded-3xl p-6 custom-shadow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="font-heading text-xl font-bold text-slate-900">เปรียบเทียบระยะเวลา (วัน)</h2>
+                            <p class="text-xs text-slate-500">เปรียบเทียบระยะเวลาการเกิดรากและการเก็บเกี่ยวผลผลิต</p>
+                        </div>
+                        <span class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        </span>
+                    </div>
+                    <div class="h-72 relative">
+                        <canvas id="timelineBarChart"></canvas>
+                    </div>
+                </div>
+                <div class="mt-4 p-3 bg-slate-50 rounded-xl text-xs text-slate-600 flex items-center space-x-2">
+                    <i data-lucide="info" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+                    <span>การปักชำกิ่งช่วยทุบสถิติเวลาเก็บเกี่ยวได้เร็วกว่าการเพาะเมล็ดถึง 3 เท่า</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Interactive Tabs for Detailed Methods -->
+        <section id="methods" class="glass-card rounded-3xl p-6 sm:p-8 custom-shadow">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-slate-100 pb-6">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Step-by-Step Guide</span>
+                    <h2 class="font-heading text-2xl sm:text-3xl font-bold text-slate-900">เจาะลึกคู่มือการขยายพันธุ์ 3 วิธี</h2>
+                </div>
+                <!-- Navigation Tabs -->
+                <div class="flex bg-slate-100 p-1.5 rounded-2xl max-w-md w-full sm:w-auto">
+                    <button onclick="switchTab('soil')" id="tab-soil" class="tab-btn active flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-2">
+                        <i data-lucide="scissors" class="w-4 h-4"></i>
+                        <span>1. ปักชำในดิน</span>
+                    </button>
+                    <button onclick="switchTab('seed')" id="tab-seed" class="tab-btn flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center space-x-2">
+                        <i data-lucide="wheat" class="w-4 h-4"></i>
+                        <span>2. เพาะเมล็ด</span>
+                    </button>
+                    <button onclick="switchTab('water')" id="tab-water" class="tab-btn flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center space-x-2">
+                        <i data-lucide="droplet" class="w-4 h-4"></i>
+                        <span>3. ปักชำในน้ำ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 1: SOIL CUTTING -->
+            <div id="content-soil" class="tab-content block space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 space-y-6">
+                        <h3 class="font-heading text-xl font-bold text-emerald-800 flex items-center space-x-2">
+                            <span class="w-8 h-8 bg-emerald-100 text-emerald-700 rounded-lg inline-flex items-center justify-center text-sm">1</span>
+                            <span>การปักชำกิ่งในดิน (Stem Cutting in Soil)</span>
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            เป็นวิธีที่แพร่หลายและรวดเร็วที่สุด ได้ต้นใหม่ที่มีพันธุกรรมเหมือนต้นแม่ 100% เหมาะอย่างยิ่งสำหรับผู้ที่ต้องการเพิ่มจำนวนต้นกะเพราไว้ใช้งานในระยะเวลาอันสั้น
+                        </p>
+
+                        <!-- Step Accordion Cards -->
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-bold flex items-center justify-center flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">คัดเลือกและตัดกิ่ง</h4>
+                                    <p class="text-xs text-slate-600 mt-1">เลือกกิ่งกะเพราที่สมบูรณ์ ไม่แก่หรืออ่อนเกินไป ความยาวประมาณ 10–15 ซม. ใช้กรรไกรคมๆ ตัดเฉียง 45 องศาบริเวณใต้ข้อใบ เพื่อเพิ่มพื้นที่ดูดซึมน้ำและเร่งการงอกราก</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-bold flex items-center justify-center flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">ริดใบออกเพื่อลดการคายน้ำ</h4>
+                                    <p class="text-xs text-slate-600 mt-1">เด็ดใบส่วนล่างออกทั้งหมด ให้เหลือเฉพาะใบยอดด้านบนไว้เพียง 3–4 ใบ เพื่อลดอัตราการสูญเสียน้ำของกิ่งขณะยังไม่มีราก</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-bold flex items-center justify-center flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">การปักชำลงวัสดุปลูก</h4>
+                                    <p class="text-xs text-slate-600 mt-1">เสียบกิ่งลงในดินร่วนผสมปุ๋ยคอกและแกลบดำ ลึกประมาณ 3–5 ซม. กดดินรอบโคนกิ่งให้แน่นพอประมาณเพื่อไม่ให้กิ่งโยกคลอน</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-bold flex items-center justify-center flex-shrink-0">4</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">การดูแลหลังปักชำ</h4>
+                                    <p class="text-xs text-slate-600 mt-1">รดน้ำให้ชุ่ม นำถุงหรือกระถางไปตั้งไว้ในที่ร่มรำไรประมาณ 7–10 วัน เมื่อยอดเริ่มตั้งตัวและแตกใบใหม่จึงค่อยเคลื่อนย้ายออกรับแสงแดดจัด</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Material Info -->
+                    <div class="space-y-6">
+                        <div class="p-6 rounded-2xl bg-emerald-50/70 border border-emerald-100">
+                            <h4 class="font-heading font-semibold text-emerald-900 flex items-center space-x-2 mb-3">
+                                <i data-lucide="box" class="w-4 h-4 text-emerald-600"></i>
+                                <span>อุปกรณ์ที่ต้องเตรียม</span>
+                            </h4>
+                            <ul class="space-y-2 text-xs text-slate-700">
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                                    <span>ก้านกะเพราจากต้นแม่พันธุ์สมบูรณ์</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                                    <span>กรรไกรตัดแต่งกิ่งฆ่าเชื้อสะอาด</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                                    <span>ถุงดำเพาะชำ หรือกระถางเล็ก</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                                    <span>ดินร่วน : ปุ๋ยคอก : แกลบดำ (1:1:1)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-900 text-white space-y-3">
+                            <span class="text-xs text-emerald-400 font-semibold uppercase tracking-wide">ข้อดี & ข้อเสีย</span>
+                            <div class="space-y-2 text-xs">
+                                <p class="text-emerald-300">✔ ได้ผลผลิตไว รวดเร็วทันใจ</p>
+                                <p class="text-emerald-300">✔ คุณลักษณะทางพันธุกรรมเหมือนต้นแม่พันธุ์ 100%</p>
+                                <p class="text-rose-300">✖ ไม่มีรากแก้ว ทำให้ลำต้นอาจทนลมแรงได้น้อยกว่า</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 2: SEED PROPAGATION -->
+            <div id="content-seed" class="tab-content hidden space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 space-y-6">
+                        <h3 class="font-heading text-xl font-bold text-amber-800 flex items-center space-x-2">
+                            <span class="w-8 h-8 bg-amber-100 text-amber-700 rounded-lg inline-flex items-center justify-center text-sm">2</span>
+                            <span>การเพาะเมล็ด (Seed Propagation)</span>
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            เหมาะอย่างยิ่งสำหรับผู้ที่ต้องการขยายพันธุ์ปริมาณมาก ทำแปลงเกษตร commercial หรือต้องการต้นกะเพราที่มีรากแก้วแข็งแรง มีอายุต้นยาวนาน ไม่โทรมง่าย
+                        </p>
+
+                        <!-- Step Accordion Cards -->
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 font-bold flex items-center justify-center flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">เตรียมเมล็ดและแช่น้ำอุ่น (Pro-Tip)</h4>
+                                    <p class="text-xs text-slate-600 mt-1">ขยี้เมล็ดจากช่อดอกแห้งสีน้ำตาล นำไปแช่น้ำอุ่นประมาณ 20–30 นาที เมล็ดจะพองตัวสร้างเมือกวุ้นขาวหุ้มรอบตัว ช่วยกระตุ้นอัตราการงอกให้เร็วและสม่ำเสมอยิ่งขึ้น</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 font-bold flex items-center justify-center flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">การหว่านลงวัสดุเพาะ</h4>
+                                    <p class="text-xs text-slate-600 mt-1">โรยเมล็ดลงบนพีทมอสหรือดินเพาะกล้าละเอียด ไม่ให้กระจุกตัวแน่นเกินไป จากนั้นกลบด้วยดินบางๆ หนาไม่เกิน 0.5 ซม.</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 font-bold flex items-center justify-center flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">รดน้ำด้วยฟ็อกกี้ & บังแดด</h4>
+                                    <p class="text-xs text-slate-600 mt-1">ใช้ฟ็อกกี้พ่นละอองน้ำให้ชุ่ม (หลีกเลี่ยงสายยางแรงดันสูงเพราะเมล็ดจะกระเด็น) วางไว้ในที่ร่ม อากาศถ่ายเทดี</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 font-bold flex items-center justify-center flex-shrink-0">4</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">การย้ายกล้า</h4>
+                                    <p class="text-xs text-slate-600 mt-1">เมล็ดจะเริ่มงอกภายใน 3-7 วัน เมื่อต้นกล้าเริ่มมีใบจริง 4–6 ใบ (ประมาณ 20–25 วัน) จึงย้ายลงปลูกในกระถางใหญ่หรือแปลงดิน</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Material Info -->
+                    <div class="space-y-6">
+                        <div class="p-6 rounded-2xl bg-amber-50/70 border border-amber-100">
+                            <h4 class="font-heading font-semibold text-amber-900 flex items-center space-x-2 mb-3">
+                                <i data-lucide="box" class="w-4 h-4 text-amber-600"></i>
+                                <span>อุปกรณ์ที่ต้องเตรียม</span>
+                            </h4>
+                            <ul class="space-y-2 text-xs text-slate-700">
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500"></i>
+                                    <span>เมล็ดกะเพราแห้งสีน้ำตาล</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500"></i>
+                                    <span>ถาดเพาะกล้า / ตะกร้าเพาะ</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500"></i>
+                                    <span>พีทมอส หรือดินเพาะกล้าร่วนละเอียด</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500"></i>
+                                    <span>ฟ็อกกี้ (Foggy) พ่นละอองน้ำ</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-900 text-white space-y-3">
+                            <span class="text-xs text-amber-400 font-semibold uppercase tracking-wide">ข้อดี & ข้อเสีย</span>
+                            <div class="space-y-2 text-xs">
+                                <p class="text-amber-300">✔ มีระบบรากแก้ว ทนทานต่อโรคและลม</p>
+                                <p class="text-amber-300">✔ ปลูกขยายได้จำนวนมากในครั้งเดียว</p>
+                                <p class="text-rose-300">✖ ใช้เวลานานกว่าจะเก็บเกี่ยวได้ (45-60 วัน)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 3: WATER PROPAGATION -->
+            <div id="content-water" class="tab-content hidden space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 space-y-6">
+                        <h3 class="font-heading text-xl font-bold text-blue-800 flex items-center space-x-2">
+                            <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg inline-flex items-center justify-center text-sm">3</span>
+                            <span>การปักชำในน้ำ (Water Propagation)</span>
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            วิธีที่ง่าย สะอาดที่สุด ไม่เลอะเทอะดิน เหมาะสำหรับผู้ที่อาศัยอยู่คอนโด หอพัก หรือต้องการเพาะกะเพราไว้ในครัวเรือนแบบ Minimal
+                        </p>
+
+                        <!-- Step Accordion Cards -->
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">เตรียมกิ่งพันธุ์คุณภาพ</h4>
+                                    <p class="text-xs text-slate-600 mt-1">คัดยอดกะเพราความยาว 10–12 ซม. เด็ดใบช่วงโคนออกทั้งหมด ให้เหลือใบเฉพาะส่วนยอดเพียง 4–6 ใบ</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">นำแช่ในภาชนะใส</h4>
+                                    <p class="text-xs text-slate-600 mt-1">ใส่ก้านกะเพราลงในแก้วน้ำใส โดยให้โคนกิ่งจมน้ำ 3–5 ซม. ข้อระวัง: อย่าให้ใบจมน้ำเพราะใบจะเน่าทำให้น้ำเสีย</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">วางในที่รำไร & เปลี่ยนน้ำบ่อยๆ</h4>
+                                    <p class="text-xs text-slate-600 mt-1">ตั้งแก้วไว้บริเวณริมหน้าต่างที่มีแสงสว่างรำไร เปลี่ยนน้ำทุกๆ 2-3 วัน เพื่อเติมออกซิเจนในน้ำและป้องกันแบคทีเรีย</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold flex items-center justify-center flex-shrink-0">4</div>
+                                <div>
+                                    <h4 class="font-heading font-semibold text-slate-900">การย้ายลงปลูกดิน</h4>
+                                    <p class="text-xs text-slate-600 mt-1">เมื่อผ่านไป 7–14 วัน รากสีขาวจะยาวประมาณ 2-3 ซม. สามารถนำไปย้ายปลูกลงกระถางดินได้อย่างปลอดภัย</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Material Info -->
+                    <div class="space-y-6">
+                        <div class="p-6 rounded-2xl bg-blue-50/70 border border-blue-100">
+                            <h4 class="font-heading font-semibold text-blue-900 flex items-center space-x-2 mb-3">
+                                <i data-lucide="box" class="w-4 h-4 text-blue-600"></i>
+                                <span>อุปกรณ์ที่ต้องเตรียม</span>
+                            </h4>
+                            <ul class="space-y-2 text-xs text-slate-700">
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500"></i>
+                                    <span>ยอดกะเพราสดสมบูรณ์</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500"></i>
+                                    <span>แก้วหรือขวดแก้วทรงสูงใส</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500"></i>
+                                    <span>น้ำสะอาด (พักน้ำประปาไว้ 1 คืน)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-900 text-white space-y-3">
+                            <span class="text-xs text-blue-400 font-semibold uppercase tracking-wide">ข้อดี & ข้อเสีย</span>
+                            <div class="space-y-2 text-xs">
+                                <p class="text-blue-300">✔ สังเกตการเจริญเติบโตของรากได้ชัดเจน</p>
+                                <p class="text-blue-300">✔ สะอาด ไม่เปรอะเปื้อนดินในบ้าน</p>
+                                <p class="text-rose-300">✖ รากที่เกิดในน้ำจะเปราะบาง ต้องระวังเมื่อย้ายลงดิน</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Quiz / Recommendation Wizard -->
+        <section id="wizard" class="glass-card rounded-3xl p-6 sm:p-8 custom-shadow bg-gradient-to-br from-emerald-900/5 via-white to-green-50/50 border border-emerald-100">
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-8">
+                <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Recommendation Engine</span>
+                </span>
+                <h2 class="font-heading text-2xl sm:text-3xl font-bold text-slate-900">ค้นหาวิธีการขยายพันธุ์ที่เหมาะกับคุณ</h2>
+                <p class="text-slate-600 text-sm">ตอบคำถามสั้นๆ 2 ข้อ เพื่อรับคำแนะนำวิธีขยายพันธุ์กะเพราที่เหมาะสมที่สุด</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <!-- Question 1 -->
+                <div>
+                    <label class="font-heading font-semibold text-slate-800 text-sm block mb-3 flex items-center space-x-2">
+                        <span class="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs">1</span>
+                        <span>พื้นที่ปลูกและสภาพแวดล้อมของคุณเป็นแบบไหน?</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button onclick="selectOption('space', 'condo', this)" class="wizard-btn-space border border-slate-200 p-3 rounded-xl text-xs font-medium text-left hover:border-emerald-500 hover:bg-emerald-50 transition flex flex-col justify-between h-20">
+                            <i data-lucide="building" class="w-4 h-4 text-emerald-600"></i>
+                            <span>คอนโด / พื้นที่จำกัด</span>
+                        </button>
+                        <button onclick="selectOption('space', 'garden', this)" class="wizard-btn-space border border-slate-200 p-3 rounded-xl text-xs font-medium text-left hover:border-emerald-500 hover:bg-emerald-50 transition flex flex-col justify-between h-20">
+                            <i data-lucide="home" class="w-4 h-4 text-emerald-600"></i>
+                            <span>สวนหลังบ้าน / กระถาง</span>
+                        </button>
+                        <button onclick="selectOption('space', 'farm', this)" class="wizard-btn-space border border-slate-200 p-3 rounded-xl text-xs font-medium text-left hover:border-emerald-500 hover:bg-emerald-50 transition flex flex-col justify-between h-20">
+                            <i data-lucide="trees" class="w-4 h-4 text-emerald-600"></i>
+                            <span>แปลงเกษตร / ปลูกขาย</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div>
+                    <label class="font-heading font-semibold text-slate-800 text-sm block mb-3 flex items-center space-x-2">
+                        <span class="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs">2</span>
+                        <span>เป้าหมายเรื่องเวลาของคุณ?</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="selectOption('goal', 'fast', this)" class="wizard-btn-goal border border-slate-200 p-3 rounded-xl text-xs font-medium text-left hover:border-emerald-500 hover:bg-emerald-50 transition flex items-center space-x-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-amber-500 flex-shrink-0"></i>
+                            <div>
+                                <div class="font-semibold text-slate-800">เน้นเร็วทันใจ</div>
+                                <div class="text-[11px] text-slate-500">อยากได้ใบกะเพรากินภายใน 2-3 สัปดาห์</div>
+                            </div>
+                        </button>
+                        <button onclick="selectOption('goal', 'durable', this)" class="wizard-btn-goal border border-slate-200 p-3 rounded-xl text-xs font-medium text-left hover:border-emerald-500 hover:bg-emerald-50 transition flex items-center space-x-3">
+                            <i data-lucide="shield" class="w-5 h-5 text-emerald-600 flex-shrink-0"></i>
+                            <div>
+                                <div class="font-semibold text-slate-800">เน้นจำนวนและรากแข็งแรง</div>
+                                <div class="text-[11px] text-slate-500">รอได้ อยากได้ต้นที่อายุยาวนาน</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Box -->
+                <div id="wizard-result" class="hidden p-5 rounded-2xl bg-emerald-950 text-white space-y-3 animate-fade-in">
+                    <div class="flex items-center space-x-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>คำแนะนำที่เหมาะกับคุณที่สุด</span>
+                    </div>
+                    <h4 id="result-title" class="font-heading text-xl font-bold text-white"></h4>
+                    <p id="result-desc" class="text-slate-300 text-xs leading-relaxed"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Comparison Matrix Table -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 custom-shadow overflow-hidden">
+            <div class="mb-6">
+                <h2 class="font-heading text-xl font-bold text-slate-900">ตารางเปรียบเทียบเชิงสรุป (Comparison Matrix)</h2>
+                <p class="text-xs text-slate-500">เปรียบเทียบรายละเอียดและปัจจัยสำคัญของทั้ง 3 วิธี</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-slate-100/80 text-slate-700 font-heading">
+                            <th class="p-3 sm:p-4 rounded-l-xl">หัวข้อเปรียบเทียบ</th>
+                            <th class="p-3 sm:p-4 text-emerald-700 font-bold">1. ปักชำในดิน</th>
+                            <th class="p-3 sm:p-4 text-amber-700 font-bold">2. เพาะเมล็ด</th>
+                            <th class="p-3 sm:p-4 text-blue-700 font-bold rounded-r-xl">3. ปักชำในน้ำ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-600">
+                        <tr>
+                            <td class="p-3 sm:p-4 font-semibold text-slate-800">ระยะเวลาออกราก / ตั้งตัว</td>
+                            <td class="p-3 sm:p-4 font-medium text-emerald-600">7 – 10 วัน</td>
+                            <td class="p-3 sm:p-4">3 – 7 วัน (เริ่มงอก)</td>
+                            <td class="p-3 sm:p-4">7 – 14 วัน</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-semibold text-slate-800">ระยะเวลาเก็บเกี่ยว</td>
+                            <td class="p-3 sm:p-4 font-medium text-emerald-600">2 – 3 สัปดาห์</td>
+                            <td class="p-3 sm:p-4">45 – 60 วัน</td>
+                            <td class="p-3 sm:p-4">3 – 4 สัปดาห์</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-semibold text-slate-800">ลักษณะระบบราก</td>
+                            <td class="p-3 sm:p-4">รากฝอย แข็งแรงปานกลาง</td>
+                            <td class="p-3 sm:p-4 font-medium text-amber-600">รากแก้ว แข็งแรงมาก</td>
+                            <td class="p-3 sm:p-4">รากฝอย เปราะบางช่วงแรก</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-semibold text-slate-800">ปริมาณผลิตต่อครั้ง</td>
+                            <td class="p-3 sm:p-4">ปานกลาง</td>
+                            <td class="p-3 sm:p-4 font-medium text-amber-600">จำนวนมาก (100+ ต้น)</td>
+                            <td class="p-3 sm:p-4">น้อย - ปานกลาง</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-semibold text-slate-800">ความคุ้มค่าด้านเวลา</td>
+                            <td class="p-3 sm:p-4"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded-md font-medium text-xs">สูงมาก</span></td>
+                            <td class="p-3 sm:p-4"><span class="px-2 py-1 bg-slate-100 text-slate-700 rounded-md text-xs">ปานกลาง</span></td>
+                            <td class="p-3 sm:p-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs">สูง</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs space-y-4 sm:space-y-0">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="sprout" class="w-4 h-4 text-emerald-500"></i>
+                <span class="text-slate-200 font-semibold font-heading">Basil Master Dashboard</span>
+            </div>
+            <div>
+                <span>ข้อมูลและสถิติด้านการเกษตรการขยายพันธุ์กะเพรา</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Section -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-slate-600');
+            });
+
+            // Show target content and activate target button
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('content-' + tabName).classList.add('block');
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-slate-600');
+        }
+
+        // CHART 1: RADAR CHART (5 Key Factors)
+        const ctxRadar = document.getElementById('propagationRadarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['ความเร็วเก็บเกี่ยว', 'ความแข็งแรงราก', 'ปริมาณที่ได้', 'ความง่ายในการทำ', 'อัตราการรอด'],
+                datasets: [
+                    {
+                        label: 'ปักชำในดิน',
+                        data: [9, 7, 7, 8, 9],
+                        backgroundColor: 'rgba(22, 163, 74, 0.2)',
+                        borderColor: '#16a34a',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#16a34a'
+                    },
+                    {
+                        label: 'เพาะเมล็ด',
+                        data: [4, 10, 10, 6, 85],
+                        backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                        borderColor: '#d97706',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#d97706'
+                    },
+                    {
+                        label: 'ปักชำในน้ำ',
+                        data: [7, 5, 5, 10, 80],
+                        backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                        borderColor: '#2563eb',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#2563eb'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#f1f5f9' },
+                        pointLabels: {
+                            font: { family: 'Sarabun', size: 11, weight: 'bold' },
+                            color: '#475569'
+                        },
+                        ticks: { display: false, max: 10, min: 0 }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { family: 'Sarabun', size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // CHART 2: BAR CHART (Timeline Comparison)
+        const ctxBar = document.getElementById('timelineBarChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['การปักชำในดิน', 'การเพาะเมล็ด', 'การปักชำในน้ำ'],
+                datasets: [
+                    {
+                        label: 'ระยะเวลาเริ่มออกราก (วัน)',
+                        data: [8, 5, 10],
+                        backgroundColor: '#86efac',
+                        borderRadius: 8
+                    },
+                    {
+                        label: 'ระยะเวลาพร้อมเก็บเกี่ยว (วัน)',
+                        data: [18, 50, 24],
+                        backgroundColor: '#16a34a',
+                        borderRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { family: 'Sarabun', size: 12 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'จำนวนวัน', font: { family: 'Sarabun' } },
+                        grid: { color: '#f1f5f9' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // INTERACTIVE RECOMMENDATION WIZARD
+        let userSelections = { space: null, goal: null };
+
+        function selectOption(category, value, element) {
+            userSelections[category] = value;
+
+            // Highlight active button
+            const buttons = document.querySelectorAll(`.wizard-btn-${category}`);
+            buttons.forEach(btn => {
+                btn.classList.remove('border-emerald-500', 'bg-emerald-50', 'ring-2', 'ring-emerald-500/20');
+            });
+            element.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-2', 'ring-emerald-500/20');
+
+            // Evaluate if both selected
+            evaluateWizard();
+        }
+
+        function evaluateWizard() {
+            if (!userSelections.space || !userSelections.goal) return;
+
+            const resultBox = document.getElementById('wizard-result');
+            const resultTitle = document.getElementById('result-title');
+            const resultDesc = document.getElementById('result-desc');
+
+            resultBox.classList.remove('hidden');
+
+            if (userSelections.space === 'condo' || userSelections.goal === 'fast') {
+                if (userSelections.space === 'condo' && userSelections.goal !== 'fast') {
+                    resultTitle.innerText = 'แนะนำ: การปักชำในน้ำ (Water Propagation)';
+                    resultDesc.innerText = 'เหมาะกับคอนโดและพื้นที่จำกัดมากที่สุด สะอาด ไม่เปรอะเปื้อนดิน สังเกตการงอกของรากได้ง่ายผ่านแก้วน้ำ!';
+                } else {
+                    resultTitle.innerText = 'แนะนำ: การปักชำกิ่งในดิน (Stem Cutting in Soil)';
+                    resultDesc.innerText = 'ตอบโจทย์ความเร็วที่สุด! สามารถเก็บเกี่ยวใบกะเพราไปประกอบอาหารได้ภายใน 2-3 สัปดาห์ ได้ต้นเหมือนแม่พันธุ์ 100%';
+                }
+            } else if (userSelections.space === 'farm' || userSelections.goal === 'durable') {
+                resultTitle.innerText = 'แนะนำ: การเพาะเมล็ด (Seed Propagation)';
+                resultDesc.innerText = 'เหมาะสำหรับการขยายพันธุ์ปริมาณมากและทำแปลงเกษตร ได้ต้นกะเพราที่มีรากแก้วแข็งแรง ทนต่อสภาพอากาศ และมีอายุต้นยาวนาน';
+            } else {
+                resultTitle.innerText = 'แนะนำ: การปักชำกิ่งในดิน (Stem Cutting in Soil)';
+                resultDesc.innerText = 'วิธีที่สมดุลที่สุด ทำง่าย ดูแลง่าย ได้ผลผลิตเร็ว และเหมาะกับสวนหลังบ้านทั่วไป';
+            }
+        }
+    </script>
+</body>
+</html>
